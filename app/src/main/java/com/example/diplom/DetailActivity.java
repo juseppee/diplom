@@ -55,7 +55,7 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
 
         detailDesc = findViewById(R.id.detailDesc);
-//        detailImage = findViewById(R.id.detailImage);
+        detailImage = findViewById(R.id.detailImage);
         detailTitle = findViewById(R.id.detailTitle);
         detailInfo = findViewById(R.id.detailInfo);
         deleteButton = findViewById(R.id.deleteButton);
@@ -66,7 +66,6 @@ public class DetailActivity extends AppCompatActivity {
 
         tabTitles = new ArrayList<>();
         tabTitles.add("Главная вкладка");
-        tabTitles.add("Главная вклада");
 
         viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), tabTitles);
         viewPager.setAdapter(viewPagerAdapter);
@@ -81,13 +80,9 @@ public class DetailActivity extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            detailDesc.setText(bundle.getString("Description"));
-            detailTitle.setText(bundle.getString("Name"));
-            detailInfo.setText(bundle.getString("Additional Info"));
             key = bundle.getString("Key");
             userId = bundle.getString("UserId");
             imageUrl = bundle.getString("Image");
-//            Glide.with(this).load(bundle.getString("Image")).into(detailImage);
         }
 
         deleteButton.setOnClickListener(new View.OnClickListener() {
@@ -177,7 +172,7 @@ public class DetailActivity extends AppCompatActivity {
         builder.show();
     }
 
-    private class ViewPagerAdapter extends FragmentPagerAdapter {
+    protected class ViewPagerAdapter extends FragmentPagerAdapter {
         private List<String> tabTitles;
 
         public ViewPagerAdapter(FragmentManager fm, List<String> tabTitles) {
@@ -187,7 +182,11 @@ public class DetailActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            return TabFragment.newInstance(tabTitles.get(position));
+            if (position == 0) {
+                return MainTabFragment.newInstance();
+            } else {
+                return TabFragment.newInstance(tabTitles.get(position));
+            }
         }
 
         @Override
