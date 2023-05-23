@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "327396581739",
+    "project_id": "diplom-bafe9",
+    "storage_bucket": "diplom-bafe9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:327396581739:android:a4a4072aa032e89c476c2e",
+        "android_client_info": {
+          "package_name": "com.example.diplom"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "327396581739-ovc8is1u4e17lnpvqavm0803qb226lnp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDJcV460xxuIjCGwzJf3bSnYl8acHl4q2Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "327396581739-ovc8is1u4e17lnpvqavm0803qb226lnp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
