@@ -69,7 +69,7 @@ public class UploadActivity extends AppCompatActivity {
                             uri = data.getData();
                             estimateImage.setImageURI(uri);
                         } else {
-                            Toast.makeText(UploadActivity.this, "No Image selected", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(UploadActivity.this, "No Image Selected", Toast.LENGTH_SHORT).show();
                         }
                     }
                 }

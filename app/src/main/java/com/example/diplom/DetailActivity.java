@@ -9,6 +9,7 @@ import androidx.viewpager.widget.ViewPager;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,15 +22,24 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import io.grpc.Context;
 
@@ -134,11 +144,31 @@ public class DetailActivity extends AppCompatActivity {
                             tabTitles.add(tabName);
                             viewPagerAdapter.notifyDataSetChanged();
                             viewPager.setCurrentItem(tabTitles.size() - 1);
+                            saveData(tabName);
                         }
                     }
                 })
                 .setNegativeButton("Отмена", null)
                 .show();
+    }
+
+    public void saveData(String tabName) {
+        FirebaseDatabase.getInstance().getReference("Estimates").child(userId).child(key)
+                .child("tabs").child(tabName).setValue(tabName).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    Toast.makeText(DetailActivity.this, "Saved", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(DetailActivity.this, "NOT Saved", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(DetailActivity.this, "AAAAAAAAAAAA", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override

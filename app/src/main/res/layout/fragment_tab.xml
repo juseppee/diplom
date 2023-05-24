@@ -2,13 +2,23 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center">
+    android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/title_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="20sp" />
+<!--    &lt;!&ndash; Кнопка для добавления нового ExpandableListView &ndash;&gt;-->
+<!--    <Button-->
+<!--        android:id="@+id/addListViewButton"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Добавить ExpandableListView" />-->
+
+    <ExpandableListView
+        android:id="@+id/expandableListView"
+        android:divider="@android:color/black"
+        android:indicatorLeft="?android:attr/expandableListPreferredChildIndicatorLeft"
+        android:dividerHeight="0.5dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
 
 </LinearLayout>
+

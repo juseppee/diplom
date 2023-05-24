@@ -20,6 +20,7 @@
             android:minHeight="?attr/actionBarSize"
             android:textColor="#FFFFFF"
             android:textSize="16sp"
+            style="@style/AppTabLayout"
             app:tabGravity="fill"
             app:tabMode="scrollable" />
 
