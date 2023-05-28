@@ -26,7 +26,7 @@
             app:shapeAppearanceOverlay="@style/roundedImageViewRounded" />
 
         <TextView
-            android:id="@+id/subtaskName"
+            android:id="@+id/recName"
             android:layout_width="140dp"
             android:layout_height="30dp"
             android:layout_marginStart="20dp"
@@ -37,12 +37,12 @@
             android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/subtaskFrom"
+            android:id="@+id/recAddInfo"
             android:layout_width="140dp"
             android:layout_height="30dp"
             android:layout_marginStart="65dp"
             android:layout_marginTop="20dp"
-            android:layout_toEndOf="@+id/subtaskName"
+            android:layout_toEndOf="@+id/recName"
             android:text="AddInfo"
             android:textColor="@color/colorPrimary"
             android:textSize="20sp" />
@@ -55,7 +55,7 @@
             android:textColor="@color/colorPrimary"
             android:textSize="14sp"
             android:layout_toEndOf="@id/recImage"
-            android:layout_below="@id/subtaskName"
+            android:layout_below="@id/recAddInfo"
             android:layout_marginStart="20dp"
             android:maxLines="1"
             android:layout_marginBottom="12dp"/>
