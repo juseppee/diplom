@@ -27,19 +27,31 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 
 import io.grpc.Context;
 
@@ -115,6 +127,30 @@ public class DetailActivity extends AppCompatActivity {
             }
         });
 
+        DatabaseReference tabsRef = FirebaseDatabase.getInstance().getReference("Estimates").child(userId).child(formattedDate)
+                .child("tabs");
+        
+        tabsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                GenericTypeIndicator<HashMap<String, Object>> typeIndicator =
+                        new GenericTypeIndicator<HashMap<String, Object>>() {
+                        };
+
+                HashMap<String, Object> hashMap = dataSnapshot.getValue(typeIndicator);
+                Set<String> keys = hashMap.keySet();
+                for (String key : keys) {
+                    tabTitles.add(key);
+                }
+                initializeTabs(tabTitles);
+                viewPagerAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -129,6 +165,17 @@ public class DetailActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    private void initializeTabs(List<String> tabNames) {
+
+        viewPagerAdapter.notifyDataSetChanged();
+        for (String tabName : tabNames) {
+            TabLayout.Tab tab = tabLayout.newTab();
+            tab.setText(tabName);
+            tabLayout.addTab(tab);
+            viewPagerAdapter.notifyDataSetChanged();
+        }
     }
 
     private void addNewTab() {
@@ -218,7 +265,6 @@ public class DetailActivity extends AppCompatActivity {
             if (position == 0) {
                 return MainTabFragment.newInstance();
             } else {
-                System.out.println("загруз " + formattedDate);
                 return TabFragment.newInstance(tabTitles.get(position), formattedDate);
             }
         }
