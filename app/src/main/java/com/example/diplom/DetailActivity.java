@@ -129,20 +129,22 @@ public class DetailActivity extends AppCompatActivity {
 
         DatabaseReference tabsRef = FirebaseDatabase.getInstance().getReference("Estimates").child(userId).child(formattedDate)
                 .child("tabs");
-        
-        tabsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+
+        tabsRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 GenericTypeIndicator<HashMap<String, Object>> typeIndicator =
                         new GenericTypeIndicator<HashMap<String, Object>>() {
                         };
 
-                HashMap<String, Object> hashMap = dataSnapshot.getValue(typeIndicator);
-                Set<String> keys = hashMap.keySet();
-                for (String key : keys) {
-                    tabTitles.add(key);
+                if (isMap(dataSnapshot.getValue())) {
+                    HashMap<String, Object> hashMap = dataSnapshot.getValue(typeIndicator);
+                    Set<String> keys = hashMap.keySet();
+                    for (String key : keys) {
+                        tabTitles.add(key);
+                    }
+                    initializeTabs(tabTitles);
                 }
-                initializeTabs(tabTitles);
                 viewPagerAdapter.notifyDataSetChanged();
             }
 
@@ -167,8 +169,11 @@ public class DetailActivity extends AppCompatActivity {
         });
     }
 
-    private void initializeTabs(List<String> tabNames) {
+    public static boolean isMap(Object obj) {
+        return obj instanceof java.util.Map;
+    }
 
+    private void initializeTabs(List<String> tabNames) {
         viewPagerAdapter.notifyDataSetChanged();
         for (String tabName : tabNames) {
             TabLayout.Tab tab = tabLayout.newTab();
@@ -194,31 +199,11 @@ public class DetailActivity extends AppCompatActivity {
                             tabTitles.add(tabName);
                             viewPagerAdapter.notifyDataSetChanged();
                             viewPager.setCurrentItem(tabTitles.size() - 1);
-                            saveData(tabName);
                         }
                     }
                 })
                 .setNegativeButton("Отмена", null)
                 .show();
-    }
-
-    public void saveData(String tabName) {
-        FirebaseDatabase.getInstance().getReference("Estimates").child(userId).child(key)
-                .child("tabs").setValue(tabName).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    Toast.makeText(DetailActivity.this, "Saved", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(DetailActivity.this, "NOT Saved", Toast.LENGTH_SHORT).show();
-                }
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(DetailActivity.this, "AAAAAAAAAAAA", Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
     @Override
