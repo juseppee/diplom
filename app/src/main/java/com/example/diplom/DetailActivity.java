@@ -130,7 +130,7 @@ public class DetailActivity extends AppCompatActivity {
         DatabaseReference tabsRef = FirebaseDatabase.getInstance().getReference("Estimates").child(userId).child(formattedDate)
                 .child("tabs");
 
-        tabsRef.addValueEventListener(new ValueEventListener() {
+        tabsRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 GenericTypeIndicator<HashMap<String, Object>> typeIndicator =
