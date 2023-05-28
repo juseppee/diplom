@@ -13,10 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.diplom.DetailActivity;
-import com.example.diplom.Estimate;
+import com.example.diplom.model.Estimate;
 import com.example.diplom.R;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
@@ -34,12 +32,14 @@ public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        System.out.println("1222НУ МОЖЕТ ХОТЬ ЭТО РАБОТАЕТ");
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_item, parent, false);
         return new MyViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
+        System.out.println("НА СВЯЗИ ОТЛАДКА ИЗ АДАПТЕРА_МОЙ_МОЙЙЙ " + estimateList.get(position).getEstimateName());
         Glide.with(context).load(estimateList.get(position).getEstimateImage()).into(holder.recImage);
         holder.recTitle.setText(estimateList.get(position).getEstimateName());
         holder.recDesc.setText(estimateList.get(position).getEstimateDesc());
@@ -55,6 +55,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
                 intent.putExtra("Additional Info", estimateList.get(holder.getAbsoluteAdapterPosition()).getEstimateAddInfo());
                 intent.putExtra("Key", estimateList.get(holder.getAbsoluteAdapterPosition()).getKey());
                 intent.putExtra("UserId",  estimateList.get(holder.getAbsoluteAdapterPosition()).getUserId());
+                intent.putExtra("FormattedDate",  estimateList.get(holder.getAbsoluteAdapterPosition()).getFormattedDate());
                 context.startActivity(intent);
             }
         });
@@ -82,7 +83,7 @@ class MyViewHolder extends RecyclerView.ViewHolder {
         recImage = itemView.findViewById(R.id.recImage);
         recCard = itemView.findViewById(R.id.recCard);
         recDesc = itemView.findViewById(R.id.recDesc);
-        recAddInfo = itemView.findViewById(R.id.recAddInfo);
-        recTitle = itemView.findViewById(R.id.recTitle);
+        recAddInfo = itemView.findViewById(R.id.subtaskFrom);
+        recTitle = itemView.findViewById(R.id.subtaskName);
     }
 }

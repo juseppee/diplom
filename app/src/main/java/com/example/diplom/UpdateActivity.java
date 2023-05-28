@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.diplom.model.Estimate;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -36,7 +37,7 @@ public class UpdateActivity extends AppCompatActivity {
     EditText updateDesc, updateTitle, updateAddInfo;
     String title, desc, additionalInfo;
     String imageUrl;
-    String userId, key, oldImageURL;
+    String userId, key, oldImageURL, formattedDate;
     Uri uri;
     DatabaseReference databaseReference;
     StorageReference storageReference;
@@ -75,6 +76,7 @@ public class UpdateActivity extends AppCompatActivity {
             key = bundle.getString("Key");
             userId = bundle.getString("UserId");
             oldImageURL = bundle.getString("Image");
+            formattedDate = bundle.getString("FormattedDate");
         }
 
         databaseReference = FirebaseDatabase.getInstance().getReference("Estimates").child(userId).child(key);
@@ -127,7 +129,7 @@ public class UpdateActivity extends AppCompatActivity {
         title = updateTitle.getText().toString().trim();
         desc = updateDesc.getText().toString().trim();
         additionalInfo = updateAddInfo.getText().toString();
-        Estimate estimate = new Estimate(title, desc, additionalInfo, imageUrl, userId);
+        Estimate estimate = new Estimate(title, desc, additionalInfo, imageUrl, userId, formattedDate);
         databaseReference.setValue(estimate).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {

@@ -1,4 +1,4 @@
-package com.example.diplom;
+package com.example.diplom.model;
 
 public class Estimate {
 
@@ -8,6 +8,11 @@ public class Estimate {
     private String estimateImage;
     private String key;
     private String userId;
+    private String formattedDate;
+
+    public String getFormattedDate() {
+        return formattedDate;
+    }
 
     public String getKey() {
         return key;
@@ -37,12 +42,13 @@ public class Estimate {
         return userId;
     }
 
-    public Estimate(String estimateName, String estimateDesc, String estimateAddInfo, String estimateImage, String userId) {
+    public Estimate(String estimateName, String estimateDesc, String estimateAddInfo, String estimateImage, String userId, String formattedDate) {
         this.estimateName = estimateName;
         this.estimateDesc = estimateDesc;
         this.estimateAddInfo = estimateAddInfo;
         this.estimateImage = estimateImage;
         this.userId = userId;
+        this.formattedDate = formattedDate;
     }
 
     public Estimate() {

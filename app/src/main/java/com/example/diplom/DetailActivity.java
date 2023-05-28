@@ -51,6 +51,7 @@ public class DetailActivity extends AppCompatActivity {
     String key = "";
     String imageUrl = "";
     String userId = "";
+    String formattedDate = "";
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
@@ -93,6 +94,7 @@ public class DetailActivity extends AppCompatActivity {
             key = bundle.getString("Key");
             userId = bundle.getString("UserId");
             imageUrl = bundle.getString("Image");
+            formattedDate = bundle.getString("FormattedDate");
         }
 
         deleteButton.setOnClickListener(new View.OnClickListener() {
@@ -122,6 +124,7 @@ public class DetailActivity extends AppCompatActivity {
                         .putExtra("Additional Info", detailInfo.getText().toString())
                         .putExtra("Image", imageUrl)
                         .putExtra("Key", key)
+                        .putExtra("FormattedDate", formattedDate)
                         .putExtra("UserId", userId);
                 startActivity(intent);
             }
@@ -154,7 +157,7 @@ public class DetailActivity extends AppCompatActivity {
 
     public void saveData(String tabName) {
         FirebaseDatabase.getInstance().getReference("Estimates").child(userId).child(key)
-                .child("tabs").child(tabName).setValue(tabName).addOnCompleteListener(new OnCompleteListener<Void>() {
+                .child("tabs").setValue(tabName).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
@@ -215,7 +218,8 @@ public class DetailActivity extends AppCompatActivity {
             if (position == 0) {
                 return MainTabFragment.newInstance();
             } else {
-                return TabFragment.newInstance(tabTitles.get(position));
+                System.out.println("загруз " + formattedDate);
+                return TabFragment.newInstance(tabTitles.get(position), formattedDate);
             }
         }
 
