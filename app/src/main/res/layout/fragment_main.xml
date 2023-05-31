@@ -53,6 +53,13 @@
             android:textColor="@color/colorPrimary"
             android:textSize="15sp" />
 
+        <LinearLayout
+            android:id="@+id/container_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+        </LinearLayout>
+
     </LinearLayout>
 
 </FrameLayout>

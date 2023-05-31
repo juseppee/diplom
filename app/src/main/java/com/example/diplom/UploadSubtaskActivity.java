@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.diplom.model.EstimateLine;
@@ -71,7 +70,7 @@ public class UploadSubtaskActivity extends AppCompatActivity {
         String subtaskName = this.subtaskName.getText().toString();
         String subtaskFrom = this.subtaskFrom.getText().toString();
         String subtaskTo = this.subtaskTo.getText().toString();
-        EstimateLine estimateLine = new EstimateLine(subtaskName, subtaskFrom, subtaskTo, userId, tabName);
+        EstimateLine estimateLine = new EstimateLine(subtaskName, subtaskTo, subtaskFrom, userId, tabName);
         Date currentDate = new Date();
         String formattedDate = new SimpleDateFormat("dd MMMM yyyy HH:mm:ss", Locale.ENGLISH).format(currentDate);
         FirebaseDatabase.getInstance().getReference("Estimates").child(userId).child(estimatePath)

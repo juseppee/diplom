@@ -9,23 +9,17 @@ import androidx.viewpager.widget.ViewPager;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
+import com.example.diplom.model.EstimatedTimeTab;
 import com.github.clans.fab.FloatingActionButton;
-import com.github.clans.fab.FloatingActionMenu;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -35,25 +29,12 @@ import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-
-import io.grpc.Context;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -69,8 +50,10 @@ public class DetailActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private ViewPagerAdapter viewPagerAdapter;
     private FloatingActionButton addTabButton;
+    MainTabFragment fragment;
 
     private List<String> tabTitles;
+    private List<EstimatedTimeTab> estimatedTimeTabs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +69,9 @@ public class DetailActivity extends AppCompatActivity {
         tabLayout = findViewById(R.id.tab_layout);
         viewPager = findViewById(R.id.view_pager);
         addTabButton = findViewById(R.id.add_tab_button);
-
+        //TODO
+        fragment = MainTabFragment.newInstance();
+        estimatedTimeTabs = new ArrayList<>();
         tabTitles = new ArrayList<>();
         tabTitles.add("Главная вкладка");
 
@@ -153,6 +138,27 @@ public class DetailActivity extends AppCompatActivity {
             }
         });
 
+        tabsRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                GenericTypeIndicator<HashMap<String, Object>> typeIndicator =
+                        new GenericTypeIndicator<HashMap<String, Object>>() {
+                        };
+
+                if (isMap(snapshot.getValue())) {
+                    HashMap<String, Object> hashMap = snapshot.getValue(typeIndicator);
+                    estimatedTimeTabs = calculateTimeInTabs(hashMap);
+                    fragment.setEstimatedTimeTabs(estimatedTimeTabs);
+                    System.out.println("ПРОВЕРКА " + estimatedTimeTabs.isEmpty());
+                }
+                viewPagerAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -167,6 +173,43 @@ public class DetailActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    private List<EstimatedTimeTab> calculateTimeInTabs(HashMap<String, Object> hashMap) {
+        Set<String> keys = hashMap.keySet();
+        int sumTimeFrom = 0;
+        int sumTimeTo = 0;
+        String tabName = "";
+        List<EstimatedTimeTab> estimatedTimeTabs = new ArrayList<>();
+        Map<String, Object> nestedMap = new HashMap<>();
+        for (String key : keys) {
+            sumTimeFrom = 0;
+            sumTimeTo = 0;
+            Object hh = hashMap.get(key);
+            nestedMap = convertToMap(hh);
+            Set<String> subKeys = nestedMap.keySet();
+            for (String subKey : subKeys) {
+                Map<String, Object> another = new HashMap<>();
+                hh = nestedMap.get(subKey);
+                another = convertToMap(hh);
+
+                tabName = another.get("tabName").toString();
+                sumTimeFrom = sumTimeFrom + Integer.parseInt(another.get("subtaskFrom").toString());
+                sumTimeTo = sumTimeTo + Integer.parseInt(another.get("subtaskTo").toString());
+            }
+            EstimatedTimeTab estimatedTimeTab = new EstimatedTimeTab(tabName, sumTimeFrom, sumTimeTo);
+            System.out.println("ВРЕМЯЧКО " + sumTimeFrom);
+            estimatedTimeTabs.add(estimatedTimeTab);
+        }
+
+        return estimatedTimeTabs;
+    }
+
+    public static Map<String, Object> convertToMap(Object object) {
+        if (object instanceof Map) {
+            return (Map<String, Object>) object;
+        }
+        return null;
     }
 
     public static boolean isMap(Object obj) {
@@ -248,7 +291,9 @@ public class DetailActivity extends AppCompatActivity {
         @Override
         public Fragment getItem(int position) {
             if (position == 0) {
-                return MainTabFragment.newInstance();
+                System.out.println("ПРОВЕРКА " + estimatedTimeTabs.get(0));
+                fragment.setEstimatedTimeTabs(estimatedTimeTabs);
+                return fragment;
             } else {
                 return TabFragment.newInstance(tabTitles.get(position), formattedDate);
             }

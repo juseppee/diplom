@@ -9,9 +9,6 @@ public class EstimateLine {
     private String key;
     private String userId;
 
-    public String getKey() {
-        return key;
-    }
 
     public void setKey(String key) {
         this.key = key;
@@ -29,9 +26,6 @@ public class EstimateLine {
         return subtaskFrom;
     }
 
-    public String getUserId() {
-        return userId;
-    }
 
     public EstimateLine(String subtaskName, String subtaskTo, String subtaskFrom, String userId, String tabName) {
         this.subtaskName = subtaskName;
