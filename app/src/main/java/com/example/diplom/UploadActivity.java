@@ -121,21 +121,25 @@ public class UploadActivity extends AppCompatActivity {
         Date currentDate = new Date();
         String formattedDate = new SimpleDateFormat("dd MMMM yyyy HH:mm:ss", Locale.ENGLISH).format(currentDate);
         Estimate estimate = new Estimate(name, desc, addInfo, imageURL, userId, formattedDate);
-        FirebaseDatabase.getInstance().getReference("Estimates").child(userId).child(formattedDate)
-                .setValue(estimate).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    Toast.makeText(UploadActivity.this, "Saved", Toast.LENGTH_SHORT).show();
-                    finish();
-                } else {
-                    Toast.makeText(UploadActivity.this, "NOT Saved", Toast.LENGTH_SHORT).show();
-                }
-            }
-        }).addOnFailureListener(new OnFailureListener() {
+        FirebaseDatabase.getInstance()
+                .getReference("Estimates")
+                .child(userId)
+                .child(formattedDate)
+                .setValue(estimate)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(UploadActivity.this, "Saved", Toast.LENGTH_SHORT).show();
+                            finish();
+                        } else {
+                            Toast.makeText(UploadActivity.this, "NOT Saved", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(UploadActivity.this, "AAAAAAAAAAAA", Toast.LENGTH_SHORT).show();
+                Toast.makeText(UploadActivity.this, "An error occurred", Toast.LENGTH_SHORT).show();
             }
         });
     }

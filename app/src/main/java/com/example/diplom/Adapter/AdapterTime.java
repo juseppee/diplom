@@ -10,7 +10,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.diplom.R;
-import com.example.diplom.model.EstimateLine;
+import com.example.diplom.model.EstimateSubTask;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 import java.util.List;
@@ -18,11 +18,11 @@ import java.util.List;
 public class AdapterTime extends RecyclerView.Adapter<NewViewHolder> {
 
     private Context context;
-    private List<EstimateLine> estimateLineList;
+    private List<EstimateSubTask> estimateSubTaskList;
 
-    public AdapterTime(Context context, List<EstimateLine> estimateLineList) {
+    public AdapterTime(Context context, List<EstimateSubTask> estimateSubTaskList) {
         this.context = context;
-        this.estimateLineList = estimateLineList;
+        this.estimateSubTaskList = estimateSubTaskList;
     }
 
     @Override
@@ -33,14 +33,14 @@ public class AdapterTime extends RecyclerView.Adapter<NewViewHolder> {
 
     @Override
     public void onBindViewHolder(NewViewHolder holder, int position) {
-        holder.subtaskName.setText(estimateLineList.get(position).getSubtaskName());
-        holder.subtaskTo.setText(estimateLineList.get(position).getSubtaskTo());
-        holder.subtaskFrom.setText(estimateLineList.get(position).getSubtaskFrom());
+        holder.subtaskName.setText(estimateSubTaskList.get(position).getSubtaskName());
+        holder.subtaskTo.setText(estimateSubTaskList.get(position).getSubtaskTo());
+        holder.subtaskFrom.setText(estimateSubTaskList.get(position).getSubtaskFrom());
     }
 
     @Override
     public int getItemCount() {
-        return estimateLineList.size();
+        return estimateSubTaskList.size();
     }
 }
 

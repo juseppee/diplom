@@ -3,18 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="20dp">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Введите название вкладки:"
-        android:textSize="16sp" />
 
     <EditText
         android:id="@+id/tab_name_edit_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:hint="Enter tab name"
         android:inputType="text" />
 
 </LinearLayout>

@@ -9,7 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.diplom.model.EstimateLine;
+import com.example.diplom.model.EstimateSubTask;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -70,11 +70,11 @@ public class UploadSubtaskActivity extends AppCompatActivity {
         String subtaskName = this.subtaskName.getText().toString();
         String subtaskFrom = this.subtaskFrom.getText().toString();
         String subtaskTo = this.subtaskTo.getText().toString();
-        EstimateLine estimateLine = new EstimateLine(subtaskName, subtaskTo, subtaskFrom, userId, tabName);
+        EstimateSubTask estimateSubTask = new EstimateSubTask(subtaskName, subtaskTo, subtaskFrom, userId, tabName);
         Date currentDate = new Date();
         String formattedDate = new SimpleDateFormat("dd MMMM yyyy HH:mm:ss", Locale.ENGLISH).format(currentDate);
         FirebaseDatabase.getInstance().getReference("Estimates").child(userId).child(estimatePath)
-                .child("tabs").child(tabName).child(formattedDate).setValue(estimateLine)
+                .child("tabs").child(tabName).child(formattedDate).setValue(estimateSubTask)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {

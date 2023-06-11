@@ -1,10 +1,13 @@
 package com.example.diplom;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -14,13 +17,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Intent;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.anychart.chart.common.dataentry.DataEntry;
+import com.anychart.chart.common.dataentry.ValueDataEntry;
 import com.example.diplom.Adapter.AdapterTime;
-import com.example.diplom.model.EstimateLine;
+import com.example.diplom.model.EstimateSubTask;
+import com.example.diplom.model.EstimatedTimeTab;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -33,9 +41,10 @@ public class TabFragment extends Fragment {
 
     FloatingActionButton floatingActionButton;
     RecyclerView recyclerView;
-    List<EstimateLine> estimateLineList;
+    List<EstimateSubTask> estimateSubTaskList;
     DatabaseReference databaseReference;
     ValueEventListener eventListener;
+    TextView tabInfo, tabSummaryFrom, tabSummaryTo;
     AdapterTime adapter;
     String userId = "";
     String formattedDate = "";
@@ -61,7 +70,7 @@ public class TabFragment extends Fragment {
             formattedDate = getArguments().getString(FORM_DATE);
         }
 
-        estimateLineList = new ArrayList<>();
+        estimateSubTaskList = new ArrayList<>();
     }
 
     @Override
@@ -73,6 +82,7 @@ public class TabFragment extends Fragment {
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         userId = firebaseAuth.getUid();
         recyclerView = view.findViewById(R.id.recyclerViewSub);
+        tabInfo = view.findViewById(R.id.textViewTitle);
         floatingActionButton = view.findViewById(R.id.floatingActionButtonSubtask);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 1);
         recyclerView.setLayoutManager(gridLayoutManager);
@@ -84,7 +94,7 @@ public class TabFragment extends Fragment {
         dialog.show();
         databaseReference = FirebaseDatabase.getInstance().getReference("Estimates").child(userId).child(formattedDate)
                 .child("tabs").child(title);
-        adapter = new AdapterTime(getContext(), estimateLineList);
+        adapter = new AdapterTime(getContext(), estimateSubTaskList);
         recyclerView.setAdapter(adapter);
 
         dialog.show();
@@ -93,12 +103,13 @@ public class TabFragment extends Fragment {
         eventListener = databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
-                estimateLineList.clear();
+                estimateSubTaskList.clear();
                 for (DataSnapshot itemSnapshot : snapshot.getChildren()) {
-                    EstimateLine estimateLine = itemSnapshot.getValue(EstimateLine.class);
-                    estimateLine.setKey(itemSnapshot.getKey());
-                    estimateLineList.add(estimateLine);
+                    EstimateSubTask estimateSubTask = itemSnapshot.getValue(EstimateSubTask.class);
+                    estimateSubTask.setKey(itemSnapshot.getKey());
+                    estimateSubTaskList.add(estimateSubTask);
                 }
+                setSummary(estimateSubTaskList);
                 adapter.notifyDataSetChanged();
                 dialog.dismiss();
             }
@@ -123,5 +134,17 @@ public class TabFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        setSummary(estimateSubTaskList);
+    }
 
+    public void setSummary(List<EstimateSubTask> estimateSubTaskList) {
+        int sum = 0;
+        for (EstimateSubTask tab : estimateSubTaskList) {
+            sum = sum + Integer.parseInt(tab.getSubtaskTo());
+            tabInfo.setText("Придется потратить " + sum + " часов");
+        }
+    }
 }

@@ -10,6 +10,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -51,7 +52,6 @@ public class DetailActivity extends AppCompatActivity {
     private ViewPagerAdapter viewPagerAdapter;
     private FloatingActionButton addTabButton;
     MainTabFragment fragment;
-
     private List<String> tabTitles;
     private List<EstimatedTimeTab> estimatedTimeTabs;
 
@@ -69,11 +69,10 @@ public class DetailActivity extends AppCompatActivity {
         tabLayout = findViewById(R.id.tab_layout);
         viewPager = findViewById(R.id.view_pager);
         addTabButton = findViewById(R.id.add_tab_button);
-        //TODO
         fragment = MainTabFragment.newInstance();
         estimatedTimeTabs = new ArrayList<>();
         tabTitles = new ArrayList<>();
-        tabTitles.add("Главная вкладка");
+        tabTitles.add("Main tab");
 
         viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), tabTitles);
         viewPager.setAdapter(viewPagerAdapter);
@@ -149,7 +148,6 @@ public class DetailActivity extends AppCompatActivity {
                     HashMap<String, Object> hashMap = snapshot.getValue(typeIndicator);
                     estimatedTimeTabs = calculateTimeInTabs(hashMap);
                     fragment.setEstimatedTimeTabs(estimatedTimeTabs);
-                    System.out.println("ПРОВЕРКА " + estimatedTimeTabs.isEmpty());
                 }
                 viewPagerAdapter.notifyDataSetChanged();
             }
@@ -198,7 +196,6 @@ public class DetailActivity extends AppCompatActivity {
                 sumTimeTo = sumTimeTo + Integer.parseInt(another.get("subtaskTo").toString());
             }
             EstimatedTimeTab estimatedTimeTab = new EstimatedTimeTab(tabName, sumTimeFrom, sumTimeTo);
-            System.out.println("ВРЕМЯЧКО " + sumTimeFrom);
             estimatedTimeTabs.add(estimatedTimeTab);
         }
 
@@ -231,10 +228,11 @@ public class DetailActivity extends AppCompatActivity {
         View dialogView = inflater.inflate(R.layout.dialog_add_tab, null);
         final EditText tabNameEditText = dialogView.findViewById(R.id.tab_name_edit_text);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        ContextThemeWrapper themedContext = new ContextThemeWrapper(this, R.style.AlertDialogCustom);
+        AlertDialog.Builder builder = new AlertDialog.Builder(themedContext);
         builder.setView(dialogView)
-                .setTitle("Добавление вкладки")
-                .setPositiveButton("Добавить", new DialogInterface.OnClickListener() {
+                .setTitle("Adding a tab")
+                .setPositiveButton("Add", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String tabName = tabNameEditText.getText().toString();
@@ -245,24 +243,30 @@ public class DetailActivity extends AppCompatActivity {
                         }
                     }
                 })
-                .setNegativeButton("Отмена", null)
+                .setNegativeButton("Cancel", null)
                 .show();
     }
 
     @Override
     public void onBackPressed() {
-        if (tabTitles.size() > 1) {
+        int selectedTabIndex = tabLayout.getSelectedTabPosition();
+        TabLayout.Tab selectedTab = tabLayout.getTabAt(selectedTabIndex);
+        String tabTitle = selectedTab.getText().toString();
+        if (tabTitles.size() > 1 && !tabTitle.equals("Main tab")) {
             showDeleteConfirmationDialog();
         } else {
             super.onBackPressed();
+            fragment.createTetViews();
+            finish();
         }
     }
 
     private void showDeleteConfirmationDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Удаление вкладки");
-        builder.setMessage("Вы уверены, что хотите удалить текущую вкладку?");
-        builder.setPositiveButton("Да", new DialogInterface.OnClickListener() {
+        ContextThemeWrapper themedContext = new ContextThemeWrapper(this, R.style.AlertDialogCustom);
+        AlertDialog.Builder builder = new AlertDialog.Builder(themedContext);
+        builder.setTitle("Deleting a tab");
+        builder.setMessage("Are you sure?");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 int currentPosition = viewPager.getCurrentItem();
@@ -276,7 +280,7 @@ public class DetailActivity extends AppCompatActivity {
                 }
             }
         });
-        builder.setNegativeButton("Нет", null);
+        builder.setNegativeButton("No", null);
         builder.show();
     }
 
@@ -291,9 +295,14 @@ public class DetailActivity extends AppCompatActivity {
         @Override
         public Fragment getItem(int position) {
             if (position == 0) {
-                System.out.println("ПРОВЕРКА " + estimatedTimeTabs.get(0));
-                fragment.setEstimatedTimeTabs(estimatedTimeTabs);
-                return fragment;
+                if (!estimatedTimeTabs.isEmpty()) {
+                    System.out.println("ПРОВЕРКА " + estimatedTimeTabs.get(0));
+                    fragment.setEstimatedTimeTabs(estimatedTimeTabs);
+                    return fragment;
+                }
+                else {
+                    return MainTabFragment.newInstance();
+                }
             } else {
                 return TabFragment.newInstance(tabTitles.get(position), formattedDate);
             }

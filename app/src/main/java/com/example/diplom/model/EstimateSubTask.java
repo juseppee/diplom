@@ -1,6 +1,6 @@
 package com.example.diplom.model;
 
-public class EstimateLine {
+public class EstimateSubTask {
 
     private String subtaskName;
     private String subtaskTo;
@@ -27,7 +27,7 @@ public class EstimateLine {
     }
 
 
-    public EstimateLine(String subtaskName, String subtaskTo, String subtaskFrom, String userId, String tabName) {
+    public EstimateSubTask(String subtaskName, String subtaskTo, String subtaskFrom, String userId, String tabName) {
         this.subtaskName = subtaskName;
         this.subtaskTo = subtaskTo;
         this.subtaskFrom = subtaskFrom;
@@ -35,7 +35,7 @@ public class EstimateLine {
         this.userId = userId;
     }
 
-    public EstimateLine() {
+    public EstimateSubTask() {
 
     }
 

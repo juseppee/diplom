@@ -32,14 +32,12 @@ public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        System.out.println("1222НУ МОЖЕТ ХОТЬ ЭТО РАБОТАЕТ");
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_item, parent, false);
         return new MyViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        System.out.println("НА СВЯЗИ ОТЛАДКА ИЗ АДАПТЕРА_МОЙ_МОЙЙЙ " + estimateList.get(position).getEstimateName());
         Glide.with(context).load(estimateList.get(position).getEstimateImage()).into(holder.recImage);
         holder.recTitle.setText(estimateList.get(position).getEstimateName());
         holder.recDesc.setText(estimateList.get(position).getEstimateDesc());
