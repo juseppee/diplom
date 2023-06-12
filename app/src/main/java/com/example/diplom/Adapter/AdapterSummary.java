@@ -21,7 +21,7 @@ public class AdapterSummary extends RecyclerView.Adapter<NwViewHolder> {
 
     private Context context;
     private List<EstimatedTimeTab> estimatedTimeTabList;
-    private List<String> colors = Arrays.asList("#64b5f6","#1976d3", "#ffd54f", "#ef6c00");
+    private List<String> colors = Arrays.asList("#64b5f6","#1976d3", "#ef6c00", "#ffd54f");
 
     public AdapterSummary(Context context, List<EstimatedTimeTab> estimatedTimeTabList) {
         this.context = context;
@@ -37,8 +37,8 @@ public class AdapterSummary extends RecyclerView.Adapter<NwViewHolder> {
     @Override
     public void onBindViewHolder(NwViewHolder holder, int position) {
         holder.subtaskName.setText(estimatedTimeTabList.get(position).getTabName());
-        holder.subtaskTo.setText(estimatedTimeTabList.get(position).getTabTimeTo().toString());
-        holder.subtaskFrom.setText(estimatedTimeTabList.get(position).getTabTimeFrom().toString());
+        holder.subtaskTo.setText("to " + estimatedTimeTabList.get(position).getTabTimeTo().toString() + "h");
+        holder.subtaskFrom.setText("from " + estimatedTimeTabList.get(position).getTabTimeFrom().toString() + "h");
         if (position < 4) {
             holder.verticalLine.setBackgroundColor(Color.parseColor(colors.get(position)));
         } else {
@@ -59,9 +59,9 @@ class NwViewHolder extends RecyclerView.ViewHolder {
 
     public NwViewHolder(@NonNull View itemView) {
         super(itemView);
-            subtaskTo = itemView.findViewById(R.id.name);
-            subtaskFrom = itemView.findViewById(R.id.category);
-            subtaskName = itemView.findViewById(R.id.status);
+            subtaskTo = itemView.findViewById(R.id.tabTo);
+            subtaskFrom = itemView.findViewById(R.id.tabFrom);
+            subtaskName = itemView.findViewById(R.id.name);
             verticalLine = itemView.findViewById(R.id.verticalLine);
     }
 }

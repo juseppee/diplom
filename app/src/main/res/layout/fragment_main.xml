@@ -60,7 +60,6 @@
                     android:text="The estimated project completion time is 3 to 10 hours including entered risks (10%)"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     android:textSize="15sp"
-                    android:textColor="@color/colorPrimary"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toTopOf="parent"/>
@@ -70,11 +69,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
-                    android:textColor="@color/colorPrimary"
                     android:layout_marginBottom="10dp"
                     android:layout_marginTop="8dp"
                     android:text="от 8 часов"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintBottom_toTopOf="@id/summaryTo"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -83,10 +80,8 @@
                     android:id="@+id/summaryTo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/colorPrimary"
                     android:layout_marginBottom="8dp"
                     android:text="до 18 часов"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     app:layout_constraintEnd_toEndOf="@+id/summaryFrom"
                     app:layout_constraintBottom_toBottomOf="parent"/>
 
@@ -102,18 +97,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
-<!--            <ListView-->
-<!--                android:id="@+id/taskList"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:layout_marginStart="24dp"-->
-<!--                android:layout_marginTop="8dp"-->
-<!--                android:layout_marginEnd="24dp"-->
-<!--                android:layout_marginBottom="24dp"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toBottomOf="@+id/anyChartView" />-->
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/taskList"
