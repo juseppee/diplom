@@ -30,12 +30,13 @@
             android:layout_below="@id/tab_layout" />
 
         <com.github.clans.fab.FloatingActionMenu
+            android:id="@+id/fabMenu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginEnd="19dp"
+            android:layout_marginBottom="17dp"
             app:menu_colorNormal="@color/colorPrimary"
             app:menu_colorPressed="@color/colorPrimary"
             app:menu_fab_size="normal"
@@ -66,7 +67,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_baseline_add_24"
-                app:fab_colorNormal="@color/red"
+                app:fab_colorNormal="@color/colorPrimary"
                 app:fab_showShadow="true"
                 app:fab_size="mini" />
         </com.github.clans.fab.FloatingActionMenu>

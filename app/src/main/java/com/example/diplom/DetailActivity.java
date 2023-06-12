@@ -18,8 +18,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.diplom.model.EstimatedTimeTab;
 import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.database.DataSnapshot;
@@ -39,7 +41,7 @@ import java.util.Set;
 
 public class DetailActivity extends AppCompatActivity {
 
-    TextView detailDesc, detailTitle, detailInfo;
+    String detailDesc, detailTitle, detailInfo;
     ImageView detailImage;
     FloatingActionButton deleteButton, editButton;
     String key = "";
@@ -60,13 +62,11 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        detailDesc = findViewById(R.id.detailDesc);
         detailImage = findViewById(R.id.detailImage);
-        detailTitle = findViewById(R.id.detailTitle);
-        detailInfo = findViewById(R.id.detailInfo);
         deleteButton = findViewById(R.id.deleteButton);
         editButton = findViewById(R.id.editButton);
         tabLayout = findViewById(R.id.tab_layout);
+
         viewPager = findViewById(R.id.view_pager);
         addTabButton = findViewById(R.id.add_tab_button);
         fragment = MainTabFragment.newInstance();
@@ -91,6 +91,13 @@ public class DetailActivity extends AppCompatActivity {
             userId = bundle.getString("UserId");
             imageUrl = bundle.getString("Image");
             formattedDate = bundle.getString("FormattedDate");
+        }
+
+        bundle = getIntent().getExtras();
+        if (bundle != null) {
+            detailDesc = bundle.getString("Description");
+            detailTitle = bundle.getString("Name");
+            detailInfo = bundle.getString("Additional Info");
         }
 
         deleteButton.setOnClickListener(new View.OnClickListener() {
@@ -161,14 +168,38 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(DetailActivity.this, UpdateActivity.class)
-                        .putExtra("Title", detailTitle.getText().toString())
-                        .putExtra("Description", detailDesc.getText().toString())
-                        .putExtra("Additional Info", detailInfo.getText().toString())
+                        .putExtra("Title", detailTitle)
+                        .putExtra("Description", detailDesc)
+                        .putExtra("Additional Info", detailInfo)
                         .putExtra("Image", imageUrl)
                         .putExtra("Key", key)
                         .putExtra("FormattedDate", formattedDate)
                         .putExtra("UserId", userId);
                 startActivity(intent);
+            }
+        });
+
+        FloatingActionMenu fabMenu = findViewById(R.id.fabMenu);
+
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                int selectedTabIndex = tabLayout.getSelectedTabPosition();
+                TabLayout.Tab selectedTab = tabLayout.getTabAt(selectedTabIndex);
+                String tabTitle = selectedTab.getText().toString();
+                if (tabTitle.equals("Main tab")) {
+                    fabMenu.setVisibility(View.VISIBLE);
+                } else {
+                    fabMenu.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
             }
         });
     }
@@ -256,8 +287,6 @@ public class DetailActivity extends AppCompatActivity {
             showDeleteConfirmationDialog();
         } else {
             super.onBackPressed();
-            fragment.createTetViews();
-            finish();
         }
     }
 
@@ -295,14 +324,8 @@ public class DetailActivity extends AppCompatActivity {
         @Override
         public Fragment getItem(int position) {
             if (position == 0) {
-                if (!estimatedTimeTabs.isEmpty()) {
-                    System.out.println("ПРОВЕРКА " + estimatedTimeTabs.get(0));
-                    fragment.setEstimatedTimeTabs(estimatedTimeTabs);
-                    return fragment;
-                }
-                else {
-                    return MainTabFragment.newInstance();
-                }
+                fragment.setEstimatedTimeTabs(estimatedTimeTabs);
+                return fragment;
             } else {
                 return TabFragment.newInstance(tabTitles.get(position), formattedDate);
             }

@@ -98,8 +98,6 @@ public class TabFragment extends Fragment {
         recyclerView.setAdapter(adapter);
 
         dialog.show();
-        System.out.println("databaseReference " + databaseReference.toString());
-
         eventListener = databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
@@ -144,7 +142,7 @@ public class TabFragment extends Fragment {
         int sum = 0;
         for (EstimateSubTask tab : estimateSubTaskList) {
             sum = sum + Integer.parseInt(tab.getSubtaskTo());
-            tabInfo.setText("Придется потратить " + sum + " часов");
+            tabInfo.setText("Completion will take up to " + sum + " hours");
         }
     }
 }

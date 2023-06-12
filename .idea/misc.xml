@@ -17,7 +17,7 @@
         <entry key="..\:/Users/User/AndroidStudioProjects/diplom/app/src/main/res/layout/activity_main.xml" value="0.358695652173913" />
         <entry key="..\:/Users/User/AndroidStudioProjects/diplom/app/src/main/res/layout/activity_menu.xml" value="0.25" />
         <entry key="..\:/Users/User/AndroidStudioProjects/diplom/app/src/main/res/layout/activity_splash.xml" value="0.358695652173913" />
-        <entry key="..\:/Users/User/AndroidStudioProjects/diplom/app/src/main/res/layout/activity_update.xml" value="0.1" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/diplom/app/src/main/res/layout/activity_update.xml" value="0.25" />
         <entry key="..\:/Users/User/AndroidStudioProjects/diplom/app/src/main/res/layout/activity_upload.xml" value="0.21510416666666668" />
         <entry key="..\:/Users/User/AndroidStudioProjects/diplom/app/src/main/res/layout/activity_upload_subtask.xml" value="0.33" />
         <entry key="..\:/Users/User/AndroidStudioProjects/diplom/app/src/main/res/layout/dialog_add_tab.xml" value="0.14266304347826086" />
@@ -34,10 +34,13 @@
         <entry key="..\:/Users/User/AndroidStudioProjects/diplom/app/src/main/res/layout/list_item.xml" value="0.17831813576494426" />
         <entry key="..\:/Users/User/AndroidStudioProjects/diplom/app/src/main/res/layout/list_row.xml" value="0.14266304347826086" />
         <entry key="..\:/Users/User/AndroidStudioProjects/diplom/app/src/main/res/layout/menu_main.xml" value="0.14266304347826086" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/diplom/app/src/main/res/layout/nav_header.xml" value="0.17300724637681159" />
         <entry key="..\:/Users/User/AndroidStudioProjects/diplom/app/src/main/res/layout/progress_layout.xml" value="0.21510416666666668" />
         <entry key="..\:/Users/User/AndroidStudioProjects/diplom/app/src/main/res/layout/recycler_item.xml" value="0.33" />
-        <entry key="..\:/Users/User/AndroidStudioProjects/diplom/app/src/main/res/layout/recycler_item_time.xml" value="0.17831813576494426" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/diplom/app/src/main/res/layout/recycler_item_time.xml" value="0.514030612244898" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/diplom/app/src/main/res/layout/tab_item.xml" value="0.33" />
         <entry key="..\:/Users/User/AndroidStudioProjects/diplom/app/src/main/res/menu/menu.xml" value="0.18802083333333333" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/diplom/app/src/main/res/menu/nav_menu.xml" value="0.2265625" />
       </map>
     </option>
   </component>

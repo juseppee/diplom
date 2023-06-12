@@ -41,7 +41,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
         Glide.with(context).load(estimateList.get(position).getEstimateImage()).into(holder.recImage);
         holder.recTitle.setText(estimateList.get(position).getEstimateName());
         holder.recDesc.setText(estimateList.get(position).getEstimateDesc());
-        holder.recAddInfo.setText(estimateList.get(position).getEstimateAddInfo());
+        holder.recAddInfo.setText(estimateList.get(position).getEstimateAddInfo() + "%");
 
         holder.recCard.setOnClickListener(new View.OnClickListener() {
             @Override

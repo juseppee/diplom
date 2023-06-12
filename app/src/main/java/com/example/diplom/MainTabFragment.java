@@ -9,11 +9,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
-import android.app.Activity;
+import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.anychart.AnyChart;
 import com.anychart.AnyChartView;
@@ -21,31 +24,38 @@ import com.anychart.chart.common.dataentry.DataEntry;
 import com.anychart.chart.common.dataentry.ValueDataEntry;
 import com.anychart.charts.Pie;
 import com.bumptech.glide.Glide;
+import com.example.diplom.Adapter.AdapterSummary;
 import com.example.diplom.model.EstimatedTimeTab;
 import com.github.clans.fab.FloatingActionButton;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.units.qual.A;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
-public class MainTabFragment extends Fragment{
+public class MainTabFragment extends Fragment {
 
-    TextView detailDesc, detailTitle, detailInfo;
+    TextView summaryInfo, detailTitle, summaryTo, summaryFrom;
     ImageView detailImage;
-    FloatingActionButton deleteButton, editButton;
+    FloatingActionButton addTabButton, editButton;
     String key = "";
     String imageUrl = "";
     String userId = "";
+    RecyclerView taskViewList;
+    AdapterSummary adapterSummary;
     List<EstimatedTimeTab> estimatedTimeTabs;
     LinearLayout containerLayout;
     AnyChartView anyChartView;
     final Handler handler = new Handler();
     Runnable runnable;
     Pie pie = null;
+    String risks;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -65,27 +75,32 @@ public class MainTabFragment extends Fragment{
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
 
-        detailDesc = view.findViewById(R.id.detailDesc);
+        summaryInfo = view.findViewById(R.id.summaryInfo);
+        summaryFrom = view.findViewById(R.id.summaryFrom);
+        summaryTo = view.findViewById(R.id.summaryTo);
+        taskViewList = view.findViewById(R.id.taskList);
         detailImage = view.findViewById(R.id.detailImage);
         detailTitle = view.findViewById(R.id.detailTitle);
-        detailInfo = view.findViewById(R.id.detailInfo);
-        deleteButton = view.findViewById(R.id.deleteButton);
+        addTabButton = view.findViewById(R.id.add_tab_button);
         editButton = view.findViewById(R.id.editButton);
         Bundle bundle = getActivity().getIntent().getExtras();
         if (bundle != null) {
-            detailDesc.setText(bundle.getString("Description"));
             detailTitle.setText(bundle.getString("Name"));
-            detailInfo.setText(bundle.getString("Additional Info"));
+            risks = bundle.getString("Additional Info");
             key = bundle.getString("Key");
             userId = bundle.getString("UserId");
             imageUrl = bundle.getString("Image");
             Glide.with(this).load(bundle.getString("Image")).into(detailImage);
         }
+
         anyChartView = view.findViewById(R.id.anyChartView);
         anyChartView.setBackgroundColor("#fafafa");
-        containerLayout = view.findViewById(R.id.container_layout);
         if (estimatedTimeTabs != null) {
-            createTextViews(estimatedTimeTabs, containerLayout);
+            GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 1);
+            taskViewList.setLayoutManager(gridLayoutManager);
+            adapterSummary = new AdapterSummary(getContext(), estimatedTimeTabs);
+            taskViewList.setAdapter(adapterSummary);
+            createTextViews(estimatedTimeTabs);
             setupChartView(estimatedTimeTabs);
         }
         return view;
@@ -93,51 +108,43 @@ public class MainTabFragment extends Fragment{
 
     private void setupChartView(List<EstimatedTimeTab> estimatedTimeTabs) {
         pie = AnyChart.pie();
+
         List<DataEntry> dataEntries = new ArrayList<>();
         for (EstimatedTimeTab estimatedTimeTab : estimatedTimeTabs) {
             dataEntries.add(new ValueDataEntry(estimatedTimeTab.getTabName(), estimatedTimeTab.getTabTimeTo()));
         }
-
         pie.data(dataEntries);
         pie.title("Estimated Time");
         anyChartView.setChart(pie);
         anyChartView.setBackgroundColor("#fafafa");
     }
 
-    public void createTextViews(List<EstimatedTimeTab> estimatedTimeTabs, LinearLayout containerLayout) {
-        containerLayout.removeAllViews();
-
-        for (EstimatedTimeTab tab : estimatedTimeTabs) {
-            TextView textView = new TextView(getContext());
-            textView.setLayoutParams(new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-            ));
-            textView.setPadding(18, 18, 18, 18);
-            textView.setPaddingRelative(55, 0, 55, 0);
-            textView.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
-            textView.setText("На реализацию вкладки " + tab.getTabName() + " уйдет от  " + tab.getTabTimeFrom() + " до " + tab.getTabTimeTo());
-
-            containerLayout.addView(textView);
+    public void createTextViews(List<EstimatedTimeTab> estimatedTimeTabs) {
+        summaryInfo.setText("The estimated project completion time including entered risks (" + risks + "%)");
+        int sumFrom = 0;
+        int sumTo = 0;
+        for (EstimatedTimeTab estimatedTimeTab : estimatedTimeTabs) {
+            sumFrom = sumFrom + estimatedTimeTab.getTabTimeFrom();
+            sumTo = sumTo + estimatedTimeTab.getTabTimeTo();
         }
+        summaryFrom.setText("from " + sumFrom + "h");
+        summaryTo.setText("to " + sumTo + "h");
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (estimatedTimeTabs != null) {
-            createTextViews(estimatedTimeTabs, containerLayout);
-            final int delayMillis = 500;
 
-            runnable = new Runnable(){
+        if (estimatedTimeTabs != null) {
+            final int delayMillis = 500;
+            adapterSummary.notifyDataSetChanged();
+            runnable = new Runnable() {
                 public void run() {
                     List<DataEntry> dataEntries = new ArrayList<>();
                     for (EstimatedTimeTab estimatedTimeTab : estimatedTimeTabs) {
                         dataEntries.add(new ValueDataEntry(estimatedTimeTab.getTabName(), estimatedTimeTab.getTabTimeTo()));
                     }
                     pie.data(dataEntries);
-
                     handler.postDelayed(this, delayMillis);
                 }
             };

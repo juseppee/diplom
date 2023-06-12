@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            xmlns:tools="http://schemas.android.com/tools"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -38,27 +38,59 @@
                 android:src="@drawable/uploadimg"
                 android:adjustViewBounds="true" />
 
-            <TextView
-                android:id="@+id/detailDesc"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="10dp"
-                android:padding="18dp"
-                android:text="Description"
-                android:textColor="@color/colorPrimary"
-                android:textSize="15sp" />
+                android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/detailInfo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="10dp"
-                android:padding="18dp"
-                android:text="AdditionalInfo"
-                android:textColor="@color/colorPrimary"
-                android:textSize="15sp" />
+                <View
+                    android:id="@+id/verticalLine"
+                    android:layout_width="4dp"
+                    android:layout_height="0dp"
+                    android:background="@color/colorPrimary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    />
+
+                <TextView
+                    android:id="@+id/summaryInfo"
+                    android:layout_width="270dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:text="The estimated project completion time is 3 to 10 hours including entered risks (10%)"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textSize="15sp"
+                    android:textColor="@color/colorPrimary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+                <TextView
+                    android:id="@+id/summaryFrom"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:textColor="@color/colorPrimary"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="8dp"
+                    android:text="от 8 часов"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/summaryTo"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/summaryTo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorPrimary"
+                    android:layout_marginBottom="8dp"
+                    android:text="до 18 часов"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    app:layout_constraintEnd_toEndOf="@+id/summaryFrom"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <com.anychart.AnyChartView
                 android:id="@+id/anyChartView"
@@ -71,12 +103,31 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+<!--            <ListView-->
+<!--                android:id="@+id/taskList"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_marginStart="24dp"-->
+<!--                android:layout_marginTop="8dp"-->
+<!--                android:layout_marginEnd="24dp"-->
+<!--                android:layout_marginBottom="24dp"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/anyChartView" />-->
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/taskList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/search"/>
+
             <LinearLayout
                 android:id="@+id/container_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"></LinearLayout>
+                android:orientation="vertical">
+            </LinearLayout>
         </LinearLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 </FrameLayout>

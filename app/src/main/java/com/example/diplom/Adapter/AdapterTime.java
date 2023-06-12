@@ -34,8 +34,8 @@ public class AdapterTime extends RecyclerView.Adapter<NewViewHolder> {
     @Override
     public void onBindViewHolder(NewViewHolder holder, int position) {
         holder.subtaskName.setText(estimateSubTaskList.get(position).getSubtaskName());
-        holder.subtaskTo.setText(estimateSubTaskList.get(position).getSubtaskTo());
-        holder.subtaskFrom.setText(estimateSubTaskList.get(position).getSubtaskFrom());
+        holder.subtaskTo.setText(estimateSubTaskList.get(position).getSubtaskTo() + "h");
+        holder.subtaskFrom.setText(estimateSubTaskList.get(position).getSubtaskFrom() + "h");
     }
 
     @Override
