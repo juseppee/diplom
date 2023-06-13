@@ -33,11 +33,12 @@
 
             <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="wrap_content"
                 android:src="@drawable/uploadimg"
                 android:id="@+id/uploadImage"
                 android:layout_marginTop="10dp"
-                android:scaleType="fitXY"/>
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"/>
 
             <EditText
                 android:layout_width="match_parent"
@@ -48,7 +49,6 @@
                 android:hint="Enter estimate name"
                 android:gravity="start|center_vertical"
                 android:textColor="@color/colorPrimary"/>
-
 
             <EditText
                 android:layout_width="match_parent"
@@ -66,7 +66,8 @@
                 android:id="@+id/estimateAdditionalInfo"
                 android:layout_marginTop="20dp"
                 android:padding="16dp"
-                android:hint="Enter additional info"
+                android:hint="Enter risk percentage"
+                android:inputType="number"
                 android:gravity="start|center_vertical"
                 android:textColor="@color/colorPrimary"/>
 

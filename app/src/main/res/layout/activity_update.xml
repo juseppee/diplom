@@ -42,7 +42,7 @@
                 android:id="@+id/updateTitle"
                 android:layout_marginTop="20dp"
                 android:padding="16dp"
-                android:hint="Enter topic name"
+                android:hint="Enter estimate name"
                 android:gravity="start|center_vertical"
                 android:textColor="@color/colorPrimary"/>
             <EditText
@@ -60,10 +60,13 @@
                 android:id="@+id/updateAddInfo"
                 android:layout_marginTop="20dp"
                 android:padding="16dp"
-                android:hint="Enter language"
+                android:hint="Enter risk percentage"
+                android:inputType="number"
                 android:gravity="start|center_vertical"
                 android:textColor="@color/colorPrimary"/>
             <Button
+                android:background="@drawable/btn_custom"
+                android:textColor="@android:color/white"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:text="Update"
